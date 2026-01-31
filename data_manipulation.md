@@ -16,6 +16,10 @@ library(tidyverse)
     ## ✖ dplyr::lag()    masks stats::lag()
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
+``` r
+library(dplyr)
+```
+
 ## Load in the FAS Litters Data
 
 ``` r
@@ -331,4 +335,26 @@ filter(litters_df, group %in% c("Con7", "Mod8"))
     ## 12 Mod8  #7/110/3-2      27.5       46                   19               8
     ## 13 Mod8  #2/95/2         28.5       44.5                 20               9
     ## 14 Mod8  #82/4           33.4       52.7                 20               8
+    ## # ℹ 2 more variables: pups_dead_birth <dbl>, pups_survive <dbl>
+
+## `mutate`
+
+``` r
+mutate(litters_df, group = str_to_lower(group))
+```
+
+    ## # A tibble: 49 × 8
+    ##    group litter_number   gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr> <chr>           <chr>      <chr>             <dbl>           <dbl>
+    ##  1 con7  #85             19.7       34.7                 20               3
+    ##  2 con7  #1/2/95/2       27         42                   19               8
+    ##  3 con7  #5/5/3/83/3-3   26         41.4                 19               6
+    ##  4 con7  #5/4/2/95/2     28.5       44.1                 19               5
+    ##  5 con7  #4/2/95/3-3     <NA>       <NA>                 20               6
+    ##  6 con7  #2/2/95/3-2     <NA>       <NA>                 20               6
+    ##  7 con7  #1/5/3/83/3-3/2 <NA>       <NA>                 20               9
+    ##  8 con8  #3/83/3-3       <NA>       <NA>                 20               9
+    ##  9 con8  #2/95/3         <NA>       <NA>                 20               8
+    ## 10 con8  #3/5/2/2/95     28.5       <NA>                 20               8
+    ## # ℹ 39 more rows
     ## # ℹ 2 more variables: pups_dead_birth <dbl>, pups_survive <dbl>
