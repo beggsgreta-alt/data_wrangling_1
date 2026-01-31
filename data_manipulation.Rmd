@@ -6,6 +6,8 @@ output: github_document
 ```{r, setup}
 library(tidyverse)
 library(dplyr)
+library(readr)
+library(stringr)
 ```
 
 ## Load in the FAS Litters Data
@@ -88,9 +90,10 @@ filter(litters_df, group %in% c("Con7", "Mod8"))
 ## `mutate`
 
 ```{r}
+litters_without_missing = filter(litters_df, !is.na(gd0_weight), !is.na(gd18_weight))
 mutate(
-  litters_df, 
-  wt_gain = gd18_weight - gd0_weight,
+  litters_without_missing, 
+  wt_gain = parse_number(`gd18_weight`) - parse_number(`gd0_weight`),
   group = str_to_lower(group))
 ```
 
@@ -98,5 +101,26 @@ mutate(
 
 ```{r}
 arrange(litters_df, pups_born_alive, gd0_weight)
+```
+
+## `%>%`
+
+```{r}
+litters_data_raw = read_csv("./data/FAS_litters.csv")
+litters_clean_name = janitor::clean_names(litters_data_raw)
+litters_data_selected = select(litters_clean_name, -pups_survive)
+litters_mutated = mutate(litters_data_selected, wt_gain = gd18_weight - gd0_weight)
+litters_without_missing_2 = filter(litters_df, !is.na(gd0_weight), !is.na(gd18_weight))
+```
+
+USE THE PIPE OPERATOR INSTEAD
+
+```{r}
+litters_df = 
+  read_csv("./data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  filter(litters_df, !is.na(gd0_weight), !is.na(gd18_weight)) %>% 
+  mutate(wt_gain = gd18_weight - gd0_weight)
 ```
 
